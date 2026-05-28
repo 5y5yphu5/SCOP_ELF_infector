@@ -31,7 +31,7 @@ parasite_entry:
     call   get_rip
 get_rip:
     pop    %r11
-    add    delta(%rip), %r11   # ADD, not SUB
+    add    delta(%rip), %r11
 
     pop    %rdx
     pop    %rsi
