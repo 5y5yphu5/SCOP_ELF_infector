@@ -78,15 +78,13 @@ Our infector:
 3. Computes the **new displacement** so that the same `lea` instruction now points to the injected parasite’s virtual address.
 4. Patches the displacement in the target binary.
 
-The parasite begins execution **after** the C library has initialised, with the original `main` address still available on the stack or in registers. This avoids issues with unresolved dynamic symbols.
-
 ### Parasite Payload
 
 The assembly file `parasite.s`:
 - Preserves all registers that may be used by `__libc_start_main` (`rdi`, `rsi`, `rdx`, `rbx`, `rbp`, `r12`–`r15`).
 - Performs a simple payload: `write(1, "absurd\n", 7)`.
 - Contains a `get_rip` function that obtains the current instruction pointer at runtime (position‑independent).
-- Adds a pre‑computed `delta` to this pointer to obtain the original `main` address.
+- Adds a pre‑computed `delta` to this pointer to obtain the original `main` runtime address.
 - Restores registers and jumps to `main`.
 
 The `delta` value is calculated by the infector as:
